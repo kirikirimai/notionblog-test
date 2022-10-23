@@ -49,13 +49,14 @@ export default function Home({ posts }) {
           </div>
           <h1>Next.js + Notion API ブログ</h1>
           <p>
-           Notionと連携しているブログです。Notionに書き込めばそのままブログとして投稿できます。
+            Notionと連携しているブログです。Notionに書き込めばそのままブログとして投稿できます。
           </p>
         </header>
 
         <h2 className={styles.heading}>All Posts</h2>
         <ol className={styles.posts}>
           {posts.map((post) => {
+            console.log(post.id)
             const date = new Date(post.last_edited_time).toLocaleString(
               "en-US",
               {
@@ -87,5 +88,14 @@ export default function Home({ posts }) {
   );
 }
 
-//SSGを追加
+//ISRを追加
+export const getStaticProps = async () => {
+  const database = await getDatabase(databaseId);
 
+  return {
+    props: {
+      posts: database
+    },
+    revalidate: 1
+  }
+}
